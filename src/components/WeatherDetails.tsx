@@ -64,7 +64,7 @@ export default function WeatherDetails(props: WeatherDetailProps) {
 export interface SingleWeatherDetailProps {
   information: string;
   icon: React.ReactNode;
-  value: string;
+  value: string | null;
 }
 
 function SingleWeatherDetail(props: SingleWeatherDetailProps) {
