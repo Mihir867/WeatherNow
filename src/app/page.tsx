@@ -155,7 +155,7 @@ export default function Home() {
                   {firstData && format(parseISO(firstData.dt_txt), "dd.MM.yyyy")}
                 </p>
               </div>
-              <Container className="flex flex-col items-center gap-4 text-black ">
+              <Container className="flex flex-col items-center gap-4 text-black dark:text-white ">
                 <div className="text-7xl text-blue-300">
                   {firstData && convertKelvinToCelsius(firstData.main.temp)}°
                 </div>
@@ -198,7 +198,7 @@ export default function Home() {
             </section>
             <section className="flex flex-col gap-4">
               <p className="text-3xl text-center text-gray-400">Forecast (next 5 days)</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-black">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-black dark:text-white">
                 {firstDataForEachDate.map((d, i) => (
                   <ForecastWeatherDetail
                     key={i}
