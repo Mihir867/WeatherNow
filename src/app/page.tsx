@@ -13,6 +13,8 @@ import { convertKelvinToCelsius } from "@/utils/convertKelvinToCelcius";
 import { getDayOrNightIcon } from "@/utils/getDayOrNightIcon";
 import { metersToKilometers } from "@/utils/metersToKilometers";
 import { convertWindSpeed } from "@/utils/convertWindSpeed";
+import { TbLocationSearch } from "react-icons/tb";
+
 
 interface WeatherDetail {
   dt: number;
@@ -74,12 +76,13 @@ export default function Home() {
   const [loadingCity, setLoadingCity] = useState(false);
   const [data, setData] = useState<WeatherData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
-  const fetchWeatherData = async () => {
+  const fetchWeatherData = async (city: string) => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=57c094cd0d9cacd1bd7cc92fe670fdca&cnt=56`
+        `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=57c094cd0d9cacd1bd7cc92fe670fdca&cnt=56`
       );
       setData(response.data);
     } catch (error) {
@@ -90,10 +93,15 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchWeatherData();
+    fetchWeatherData(place);
   }, [place]);
 
-  const firstData = data?.list[0];
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPlace(search);
+  };
+
+  const firstData = data?.list?.[0];
 
   const uniqueDates = [
     ...new Set(
@@ -121,6 +129,18 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-4 bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen text-black dark:text-white">
       <Navbar location={data?.city.name} />
+      <form onSubmit={handleSearch} className="flex justify-center p-4 ">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Enter city name"
+          className="px-4 py-2 text-black rounded-xl "
+        />
+        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-2xl ml-2">
+        <TbLocationSearch/>
+        </button>
+      </form>
       <main className="px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4">
         {loadingCity ? (
           <WeatherSkeleton />
@@ -129,53 +149,50 @@ export default function Home() {
             <section className="space-y-6">
               <div className="space-y-4 text-center">
                 <h2 className="text-4xl font-bold">
-                  {format(parseISO(firstData?.dt_txt ?? ""), "EEEE")}
+                  {firstData && format(parseISO(firstData.dt_txt), "EEEE")}
                 </h2>
                 <p className="text-xl text-black">
-                  {format(parseISO(firstData?.dt_txt ?? ""), "dd.MM.yyyy")}
+                  {firstData && format(parseISO(firstData.dt_txt), "dd.MM.yyyy")}
                 </p>
               </div>
               <Container className="flex flex-col items-center gap-4 text-black ">
                 <div className="text-7xl text-blue-300">
-                  {convertKelvinToCelsius(firstData?.main.temp ?? 296.37)}°
+                  {firstData && convertKelvinToCelsius(firstData.main.temp)}°
                 </div>
                 <div className="flex gap-10 justify-center">
                   <WeatherIcon
-                    iconName={getDayOrNightIcon(
-                      firstData?.weather[0].icon,
-                      firstData?.dt_txt
-                    )}
+                    iconName={
+                      firstData &&
+                      getDayOrNightIcon(
+                        firstData.weather[0].icon,
+                        firstData.dt_txt
+                      )
+                    }
                   />
                   <div className="flex flex-col text-center">
                     <p className="text-lg">
-                      {convertKelvinToCelsius(
-                        firstData?.main.feels_like ?? 0
-                      )}
-                      ° Feels like
+                      {firstData &&
+                        `${convertKelvinToCelsius(firstData.main.feels_like)}° Feels like`}
                     </p>
                     <p className="text-lg">
-                      {convertKelvinToCelsius(firstData?.main.temp_min ?? 0)}° ↓{" "}
-                      {convertKelvinToCelsius(firstData?.main.temp_max ?? 0)}° ↑
+                      {firstData &&
+                        `${convertKelvinToCelsius(firstData.main.temp_min)}° ↓ ${convertKelvinToCelsius(firstData.main.temp_max)}° ↑`}
                     </p>
                   </div>
                 </div>
               </Container>
               <Container className="flex justify-around bg-yellow-500/80 dark:bg-yellow-600/80 px-6 gap-4 ">
                 <WeatherDetails
-                  visability={metersToKilometers(
-                    firstData?.visibility ?? 10000
-                  )}
-                  airPressure={`${firstData?.main.pressure} hPa`}
-                  humidity={`${firstData?.main.humidity}%`}
-                  sunrise={format(
-                    fromUnixTime(data?.city.sunrise ?? 1702949452),
-                    "H:mm"
-                  )}
-                  sunset={format(
-                    fromUnixTime(data?.city.sunset ?? 1702517657),
-                    "H:mm"
-                  )}
-                  windSpeed={convertWindSpeed(firstData?.wind.speed ?? 1.64)}
+                  visability={firstData && metersToKilometers(firstData.visibility)}
+                  airPressure={firstData && `${firstData.main.pressure} hPa`}
+                  humidity={firstData && `${firstData.main.humidity}%`}
+                  sunrise={
+                    data && format(fromUnixTime(data.city.sunrise), "H:mm")
+                  }
+                  sunset={
+                    data && format(fromUnixTime(data.city.sunset), "H:mm")
+                  }
+                  windSpeed={firstData && convertWindSpeed(firstData.wind.speed)}
                 />
               </Container>
             </section>
@@ -196,17 +213,17 @@ export default function Home() {
                     airPressure={`${d?.main.pressure} hPa `}
                     humidity={`${d?.main.humidity}% `}
                     sunrise={format(
-                      fromUnixTime(data?.city.sunrise ?? 1702517657),
+                      fromUnixTime(data?.city.sunrise ?? 0),
                       "H:mm"
                     )}
                     sunset={format(
-                      fromUnixTime(data?.city.sunset ?? 1702517657),
+                      fromUnixTime(data?.city.sunset ?? 0),
                       "H:mm"
                     )}
                     visability={`${metersToKilometers(
                       d?.visibility ?? 10000
                     )} `}
-                    windSpeed={`${convertWindSpeed(d?.wind.speed ?? 1.64)} `}
+                    windSpeed={`${convertWindSpeed(d?.wind.speed ?? 0)} `}
                   />
                 ))}
               </div>
@@ -217,6 +234,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 function WeatherSkeleton() {
   return (
