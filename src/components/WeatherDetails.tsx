@@ -7,12 +7,12 @@ import { MdAir } from "react-icons/md";
 import { ImMeter } from "react-icons/im";
 
 export interface WeatherDetailProps {
-  visability: string;
-  humidity: string;
-  windSpeed: string;
-  airPressure: string;
-  sunrise: string;
-  sunset: string;
+  visability: string | undefined;
+  humidity: string | undefined;
+  windSpeed: string | undefined;
+  airPressure: string | undefined;
+  sunrise: string  | null;
+  sunset: string | null;
 }
 
 export default function WeatherDetails(props: WeatherDetailProps) {
