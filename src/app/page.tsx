@@ -71,7 +71,7 @@ interface WeatherData {
 }
 
 export default function Home() {
-  const [place, setPlace] = useState("London");
+  const [place, setPlace] = useState("Mumbai");
   const [loadingCity, setLoadingCity] = useState(false);
   const [data, setData] = useState<WeatherData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
