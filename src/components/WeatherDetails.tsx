@@ -1,7 +1,7 @@
 /** @format */
 
 import React from "react";
-import { LuEye, LuSunrise, LuSunset } from "react-icons/lu";
+import { LuEye } from "react-icons/lu";
 import { FiDroplet } from "react-icons/fi";
 import { MdAir } from "react-icons/md";
 import { ImMeter } from "react-icons/im";
@@ -11,8 +11,7 @@ export interface WeatherDetailProps {
   humidity: string | undefined;
   windSpeed: string | undefined;
   airPressure: string | undefined;
-  sunrise: string  | null;
-  sunset: string | null;
+ 
 }
 
 export default function WeatherDetails(props: WeatherDetailProps) {
@@ -21,8 +20,7 @@ export default function WeatherDetails(props: WeatherDetailProps) {
     humidity = "61%",
     windSpeed = "7 km/h",
     airPressure = "1012 hPa",
-    sunrise = "6.20",
-    sunset = "18:48"
+   
   } = props;
 
   return (
@@ -47,16 +45,7 @@ export default function WeatherDetails(props: WeatherDetailProps) {
         information="Air Pressure"
         value={airPressure}
       />
-      <SingleWeatherDetail
-        icon={<LuSunrise />}
-        information="Sunrise"
-        value={sunrise}
-      />
-      <SingleWeatherDetail
-        icon={<LuSunset />}
-        information="Sunset"
-        value={sunset}
-      />
+      
     </>
   );
 }

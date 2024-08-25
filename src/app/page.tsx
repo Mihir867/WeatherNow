@@ -66,8 +66,7 @@ interface WeatherData {
     country: string;
     population: number;
     timezone: number;
-    sunrise: number;
-    sunset: number;
+    
   };
 }
 
@@ -122,12 +121,12 @@ export default function Home() {
   if (isLoading)
     return (
       <div className="flex items-center min-h-screen justify-center">
-        <p className="animate-bounce text-4xl text-blue-500">Loading...</p>
+        <p className="animate-bounce text-4xl text-black">Loading...</p>
       </div>
     );
 
   return (
-    <div className="flex flex-col gap-4 bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen text-black dark:text-white">
+    <div className="flex flex-col gap-4 bg-gradient-to-r from-gray-800 via-gray-900 to-black min-h-screen  ">
       <Navbar location={data?.city.name} />
       <form onSubmit={handleSearch} className="flex justify-center p-4 ">
         <input
@@ -148,18 +147,18 @@ export default function Home() {
           <>
             <section className="space-y-6">
               <div className="space-y-4 text-center">
-                <h2 className="text-4xl font-bold">
+                <h2 className="text-4xl text-white font-bold">
                   {firstData && format(parseISO(firstData.dt_txt), "EEEE")}
                 </h2>
-                <p className="text-xl text-black">
+                <p className="text-xl text-white">
                   {firstData && format(parseISO(firstData.dt_txt), "dd.MM.yyyy")}
                 </p>
               </div>
-              <Container className="flex flex-col items-center gap-4 text-black dark:text-white ">
+              <Container className="flex flex-col items-center gap-4  ">
                 <div className="text-7xl text-blue-300">
                   {firstData && convertKelvinToCelsius(firstData.main.temp)}°
                 </div>
-                <div className="flex gap-10 justify-center">
+                <div className="flex gap-10 justify-center dark:text-white">
                   <WeatherIcon
                     iconName={
                       firstData &&
@@ -169,7 +168,7 @@ export default function Home() {
                       )
                     }
                   />
-                  <div className="flex flex-col text-center">
+                  <div className="flex flex-col text-center dark:text-white">
                     <p className="text-lg">
                       {firstData &&
                         `${convertKelvinToCelsius(firstData.main.feels_like)}° Feels like`}
@@ -181,17 +180,12 @@ export default function Home() {
                   </div>
                 </div>
               </Container>
-              <Container className="flex justify-around bg-yellow-500/80 dark:bg-yellow-600/80 px-6 gap-4 ">
+              <Container className="flex justify-around bg-yellow-500/80 dark:bg-yellow-600/80 px-6 gap-4  ">
                 <WeatherDetails
                   visability={firstData && metersToKilometers(firstData.visibility)}
                   airPressure={firstData && `${firstData.main.pressure} hPa`}
                   humidity={firstData && `${firstData.main.humidity}%`}
-                  sunrise={
-                    data && format(fromUnixTime(data.city.sunrise), "H:mm")
-                  }
-                  sunset={
-                    data && format(fromUnixTime(data.city.sunset), "H:mm")
-                  }
+                 
                   windSpeed={firstData && convertWindSpeed(firstData.wind.speed)}
                 />
               </Container>
@@ -212,14 +206,7 @@ export default function Home() {
                     temp_min={d?.main.temp_min ?? 0}
                     airPressure={`${d?.main.pressure} hPa `}
                     humidity={`${d?.main.humidity}% `}
-                    sunrise={format(
-                      fromUnixTime(data?.city.sunrise ?? 0),
-                      "H:mm"
-                    )}
-                    sunset={format(
-                      fromUnixTime(data?.city.sunset ?? 0),
-                      "H:mm"
-                    )}
+                  
                     visability={`${metersToKilometers(
                       d?.visibility ?? 10000
                     )} `}
