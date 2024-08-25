@@ -190,9 +190,9 @@ export default function Home() {
                 />
               </Container>
             </section>
-            <section className="flex flex-col gap-4">
+            <section className="flex flex-col gap-4 ">
               <p className="text-3xl text-center text-gray-400">Forecast (next 5 days)</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-black dark:text-white">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
                 {firstDataForEachDate.map((d, i) => (
                   <ForecastWeatherDetail
                     key={i}
