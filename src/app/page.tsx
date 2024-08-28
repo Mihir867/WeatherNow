@@ -168,7 +168,7 @@ export default function Home() {
                       )
                     }
                   />
-                  <div className="flex flex-col text-center dark:text-white">
+                  <div className="flex flex-col text-center text-black dark:text-white">
                     <p className="text-lg">
                       {firstData &&
                         `${convertKelvinToCelsius(firstData.main.feels_like)}° Feels like`}
